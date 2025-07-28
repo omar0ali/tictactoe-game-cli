@@ -24,6 +24,7 @@ func CreateWindow(title string) Window {
 		panic(err)
 	}
 	screen.SetTitle(title)
+	screen.EnableMouse()
 	return Window{
 		Screen: screen,
 		Ticker: time.NewTicker(33 * time.Millisecond),
