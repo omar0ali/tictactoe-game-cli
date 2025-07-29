@@ -20,23 +20,32 @@ type GridView struct {
 	items []Box
 }
 
-func InitGridView(no, gap, scale int, window *core.Window) GridView {
-	// we know that each has the same size width and height
+func InitGridView(no, gap, scale, max int, window *core.Window) GridView {
 	width, height := window.Screen.Size()
 
 	// calculate the total width to use
-	totalBoxesWidth := no * scale
-	totalGapsWidth := (no - 1) * gap
+	totalBoxesWidth := max * scale
+	totalGapsWidth := (max - 1) * gap
 	totalRowWidth := totalBoxesWidth + totalGapsWidth
 
 	startX := (width - totalRowWidth) / 2 // this will give us the correct coords center of screen
 
 	boxes := []Box{}
+	currentXPos := 1
+	currentYPos := (height / 2) - ((no / max) + (scale - gap))
+	tempStartX := startX
 	for range no {
-		box := entities.CreateBoxHolder(utils.Point{X: startX, Y: height / 2}, scale)
+		if currentXPos > max {
+			currentYPos += scale
+			currentXPos = 1
+			tempStartX = startX
+		}
+		box := entities.CreateBoxHolder(utils.Point{X: tempStartX, Y: currentYPos}, scale)
 		box.SetContent('X') // TODO: Update as needed
 		boxes = append(boxes, box)
-		startX = startX + scale + gap
+		tempStartX = tempStartX + scale + gap
+		currentXPos += 1
+
 	}
 
 	return GridView{items: boxes}

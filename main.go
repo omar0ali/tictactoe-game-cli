@@ -19,7 +19,7 @@ func main() {
 	// // for large box, increament by even numbers: min set to 4
 	// box := entities.CreateBoxHolder(utils.Point{X: width / 2, Y: height / 2}, 4)
 	// box.SetContent('X')
-	gridView := views.InitGridView(5, 1, 4, &window)
+	gridView := views.InitGridView(9, 1, 4, 3, &window)
 	// add objects into the game
 	gameState := game.GameContext{Window: &window}
 	// gameState.AddEntity(box)
