@@ -4,89 +4,87 @@ package entities
 import (
 	"github.com/gdamore/tcell/v2"
 	"github.com/omar0ali/tictactoe-game-cli/game"
+	"github.com/omar0ali/tictactoe-game-cli/utils"
 )
 
-type Point struct {
-	X, Y int
-}
-type boxHolder struct {
-	sPoints Point
-	ePoints Point
+type BoxHolder struct {
+	sPoints utils.Point
+	ePoints utils.Point
 	content rune
-	Visible bool
+	visible bool
 }
 
-func CreateBoxHolder(startPoint Point, scale int) boxHolder {
+func CreateBoxHolder(startPoint utils.Point, scale int) *BoxHolder {
 	minimum := max(scale, 4)
 	startX := startPoint.X
 	startY := startPoint.Y
 	endX := startPoint.X + minimum
 	endY := startPoint.Y + minimum - 2
-	boxHolder := boxHolder{
-		sPoints: Point{startX, startY},
-		ePoints: Point{endX, endY},
-		Visible: false,
+	boxHolder := BoxHolder{
+		sPoints: utils.Point{X: startX, Y: startY},
+		ePoints: utils.Point{X: endX, Y: endY},
+		visible: false,
 	}
-	return boxHolder
+	return &boxHolder
 }
 
-func (b *boxHolder) InputEvents(event tcell.Event) {
+func (b *BoxHolder) InputEvents(event tcell.Event) {
 	switch ev := event.(type) {
 	case *tcell.EventMouse:
 		if ev.Buttons() == tcell.Button1 {
 			mouseX, mouseY := ev.Position()
 			if mouseX >= b.sPoints.X && mouseY >= b.sPoints.Y {
 				if mouseX <= b.ePoints.X && mouseY <= b.ePoints.Y {
-					b.Visible = !b.Visible
+					b.visible = !b.visible
 				}
 			}
 		}
 	}
 }
 
-func (b *boxHolder) GetTopLeftCoords() Point {
+func (b *BoxHolder) GetTopLeftCoords() utils.Point {
 	return b.sPoints
 }
 
-func (b *boxHolder) GetBottomRightCoords() Point {
+func (b *BoxHolder) GetBottomRightCoords() utils.Point {
 	return b.ePoints
 }
 
-func (b *boxHolder) GetTopRightCoords() Point {
-	return Point{
+func (b *BoxHolder) GetTopRightCoords() utils.Point {
+	return utils.Point{
 		X: b.ePoints.X,
 		Y: b.sPoints.Y,
 	}
 }
 
-func (b *boxHolder) GetBottomLeftCoords() Point {
-	return Point{
+func (b *BoxHolder) GetBottomLeftCoords() utils.Point {
+	return utils.Point{
 		X: b.sPoints.X,
 		Y: b.ePoints.Y,
 	}
 }
 
-func (b *boxHolder) GetBoxHeight() int {
+func (b *BoxHolder) GetBoxHeight() int {
 	return b.ePoints.Y - b.sPoints.Y
 }
 
-func (b *boxHolder) GetBoxWidth() int {
+func (b *BoxHolder) GetBoxWidth() int {
 	return b.ePoints.X - b.sPoints.X
 }
 
-func (b *boxHolder) SetContent(rune rune) {
+func (b *BoxHolder) SetContent(rune rune) {
 	b.content = rune
 }
 
-func (b *boxHolder) Update(gs *game.GameContext) {
-	if b.Visible {
+func (b *BoxHolder) Update(gs *game.GameContext) {
+	if b.visible {
 		middleX := (b.GetBoxWidth() / 2) + b.sPoints.X
 		middleY := (b.GetBoxHeight() / 2) + b.sPoints.Y
 		gs.Window.SetContent(middleX, middleY, b.content)
 	}
 }
 
-func (b *boxHolder) Draw(gs *game.GameContext) {
+func (b *BoxHolder) Draw(gs *game.GameContext) {
 	// draw corners
 	gs.Window.SetContent(b.GetTopLeftCoords().X, b.GetTopLeftCoords().Y, tcell.RuneULCorner)
 	gs.Window.SetContent(b.GetTopRightCoords().X, b.GetTopRightCoords().Y, tcell.RuneURCorner)

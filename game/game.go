@@ -18,8 +18,8 @@ type (
 	}
 )
 
-func (gs *GameContext) AddEntity(entity Entity) {
-	gs.entities = append(gs.entities, entity)
+func (gs *GameContext) AddEntity(entity ...Entity) {
+	gs.entities = append(gs.entities, entity...)
 }
 
 func (gs *GameContext) GetEntities() []Entity {

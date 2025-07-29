@@ -5,6 +5,7 @@ import (
 	"github.com/omar0ali/tictactoe-game-cli/core"
 	"github.com/omar0ali/tictactoe-game-cli/entities"
 	"github.com/omar0ali/tictactoe-game-cli/game"
+	"github.com/omar0ali/tictactoe-game-cli/views"
 )
 
 func main() {
@@ -14,17 +15,22 @@ func main() {
 	exit := make(chan int)
 
 	// test
-	width, height := window.Screen.Size()
-	box := entities.CreateBoxHolder(entities.Point{X: width / 2, Y: height / 2}, 4)
-	box.SetContent('X')
-	box1 := entities.CreateBoxHolder(entities.Point{X: (width / 2) + 5, Y: height / 2}, 4)
-	box1.SetContent('O')
-	// for large box, increament by even numbers: min set to 4
-
+	// width, height := window.Screen.Size()
+	// // for large box, increament by even numbers: min set to 4
+	// box := entities.CreateBoxHolder(utils.Point{X: width / 2, Y: height / 2}, 4)
+	// box.SetContent('X')
+	gridView := views.InitGridView(5, 1, 4, &window)
 	// add objects into the game
 	gameState := game.GameContext{Window: &window}
-	gameState.AddEntity(&box)
-	gameState.AddEntity(&box1)
+	// gameState.AddEntity(box)
+	for i := range gridView.GetItems() {
+		box := gridView.GetItems()[i]
+		boxHolder, ok := box.(*entities.BoxHolder)
+		if !ok {
+			panic("Type assertion failed: not a *BoxHolder")
+		}
+		gameState.AddEntity(boxHolder)
+	}
 
 	window.Events(exit,
 		func(event tcell.Event) {
