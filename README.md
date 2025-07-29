@@ -7,7 +7,8 @@ A simple terminal-based implementation of the classic **TicTacToe** game written
     - Uses `ticker` Update() iterate over frames. Currently shows FPS top left the screen.
 - [X] Single Box Object that can be clicked via the mouse button to draw on `X` or `O`
 - [ ] Set 9 boxes in the middle of the screen
-    - Ensure all boxes are centered
+    - [X] Ensure all boxes are centered
+    - [X] GridView created and can draw list of boxes
 
 ## Getting Started
 
