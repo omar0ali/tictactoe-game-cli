@@ -22,30 +22,42 @@ type GridView struct {
 
 func InitGridView(no, gap, scale, max int, window *core.Window) GridView {
 	width, height := window.Screen.Size()
-
-	// calculate the total width to use
-	totalBoxesWidth := max * scale
-	totalGapsWidth := (max - 1) * gap
-	totalRowWidth := totalBoxesWidth + totalGapsWidth
-
-	startX := (width - totalRowWidth) / 2 // this will give us the correct coords center of screen
-
 	boxes := []Box{}
-	currentXPos := 1
-	currentYPos := (height / 2) - ((no / max) + (scale - gap))
-	tempStartX := startX
-	for range no {
-		if currentXPos > max {
-			currentYPos += scale
-			currentXPos = 1
-			tempStartX = startX
-		}
-		box := entities.CreateBoxHolder(utils.Point{X: tempStartX, Y: currentYPos}, scale)
-		box.SetContent('X') // TODO: Update as needed
-		boxes = append(boxes, box)
-		tempStartX = tempStartX + scale + gap
-		currentXPos += 1
 
+	// total width
+	columns := max * scale
+	gaps := (max - 1) * gap
+	totalRowWidth := columns + gaps
+	startX := (width - totalRowWidth) / 2
+
+	// total height
+
+	// this one made sense lol | we always have one row missing when there is a fraction in result
+	rows := no / max
+	if no%max != 0 {
+		rows++
+	}
+	totalHeight := rows*scale + (rows-1)*gap // we always have 1 gap less of the total rows
+	startY := (height - totalHeight) / 2
+
+	currentCol := startX
+	currentRow := startY
+
+	col := 0
+	for range no {
+		box := entities.CreateBoxHolder(utils.Point{X: currentCol, Y: currentRow}, scale)
+		box.SetContent('X')
+		boxes = append(boxes, box)
+		col++ // added one
+		if col == max {
+			// move to next row
+			col = 0
+			currentCol = startX
+			currentRow += scale + gap
+		} else {
+			// move to next column
+			currentCol += scale + gap
+		}
 	}
 
 	return GridView{items: boxes}
