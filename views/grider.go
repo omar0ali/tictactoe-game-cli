@@ -24,6 +24,10 @@ func InitGridView(no, gap, scale, max int, window *core.Window) GridView {
 	width, height := window.Screen.Size()
 	boxes := []Box{}
 
+	/*
+	* [ 2 ] 1 [ 2 ] 1 [ 2 ] scale = 2, gap = 1, no = 3, max = 3 | = 8
+	*  totalRowWidth = 3 * (2+1) -1 = 8
+	 */
 	// total width
 	columns := max * scale
 	gaps := (max - 1) * gap
@@ -46,7 +50,6 @@ func InitGridView(no, gap, scale, max int, window *core.Window) GridView {
 	col := 0
 	for range no {
 		box := entities.CreateBoxHolder(utils.Point{X: currentCol, Y: currentRow}, scale)
-		box.SetContent('X')
 		boxes = append(boxes, box)
 		col++ // added one
 		if col == max {

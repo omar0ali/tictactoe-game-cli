@@ -21,7 +21,7 @@ func main() {
 	// box.SetContent('X')
 	gridView := views.InitGridView(9, 1, 4, 3, &window)
 	// add objects into the game
-	gameState := game.GameContext{Window: &window}
+	gameState := game.GameContext{Window: &window, PlayerTurn: game.P1}
 	// gameState.AddEntity(box)
 	for i := range gridView.GetItems() {
 		box := gridView.GetItems()[i]
@@ -35,7 +35,7 @@ func main() {
 	window.Events(exit,
 		func(event tcell.Event) {
 			for _, entity := range gameState.GetEntities() {
-				entity.InputEvents(event)
+				entity.InputEvents(event, &gameState)
 			}
 		},
 	)
