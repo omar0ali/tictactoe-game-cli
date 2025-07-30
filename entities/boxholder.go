@@ -28,13 +28,25 @@ func CreateBoxHolder(startPoint utils.Point, scale int) *BoxHolder {
 	return &boxHolder
 }
 
-func (b *BoxHolder) InputEvents(event tcell.Event) {
+func (b *BoxHolder) InputEvents(event tcell.Event, gc *game.GameContext) {
 	switch ev := event.(type) {
 	case *tcell.EventMouse:
 		if ev.Buttons() == tcell.Button1 {
+			if b.visible {
+				return
+			}
 			mouseX, mouseY := ev.Position()
 			if mouseX >= b.sPoints.X && mouseY >= b.sPoints.Y {
 				if mouseX <= b.ePoints.X && mouseY <= b.ePoints.Y {
+					switch gc.PlayerTurn {
+					case game.P1:
+						b.content = 'X'
+						gc.PlayerTurn = game.P2
+					case game.P2:
+						b.content = 'O'
+						gc.PlayerTurn = game.P1
+					}
+					// and
 					b.visible = !b.visible
 				}
 			}
@@ -70,10 +82,6 @@ func (b *BoxHolder) GetBoxHeight() int {
 
 func (b *BoxHolder) GetBoxWidth() int {
 	return b.ePoints.X - b.sPoints.X
-}
-
-func (b *BoxHolder) SetContent(rune rune) {
-	b.content = rune
 }
 
 func (b *BoxHolder) Update(gs *game.GameContext) {
