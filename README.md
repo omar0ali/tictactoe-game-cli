@@ -5,10 +5,13 @@ A simple terminal-based implementation of the classic **TicTacToe** game written
 ## TODOS
 - [x] Implement a window Object (tcell screen), ready to be drawn on the screen.
     - Uses `ticker` Update() iterate over frames. Currently shows FPS top left the screen.
-- [X] Single Box Object that can be clicked via the mouse button to draw on `X` or `O`
-- [ ] Set 9 boxes in the middle of the screen
-    - [X] Ensure all boxes are centered
-    - [X] GridView created and can draw list of boxes
+- [X] Single Box Object that can be clicked via the mouse button to draw on `X` or `O`.
+- [X] Set 9 boxes in the middle of the screen.
+    - [X] Ensure all boxes are centered.
+    - [X] GridView created and can draw list of boxes.
+- [ ] Player Scores when win pattern correct and reset.
+- [ ] Clear or Restart game when pressing i.e `r` key.
+- [ ] Show logs and current Turn.
 
 ## Getting Started
 
