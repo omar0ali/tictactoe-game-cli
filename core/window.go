@@ -40,6 +40,8 @@ func (s *Window) Events(
 		for {
 			event := s.Screen.PollEvent()
 			switch ev := event.(type) {
+			case *tcell.EventResize:
+				s.Screen.Clear()
 			case *tcell.EventKey:
 				if ev.Key() == tcell.KeyESC || ev.Rune() == 'q' {
 					exit <- 0
