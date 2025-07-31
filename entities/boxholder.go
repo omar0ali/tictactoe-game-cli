@@ -2,6 +2,8 @@
 package entities
 
 import (
+	"fmt"
+
 	"github.com/gdamore/tcell/v2"
 	"github.com/omar0ali/tictactoe-game-cli/game"
 	"github.com/omar0ali/tictactoe-game-cli/utils"
@@ -12,6 +14,7 @@ type BoxHolder struct {
 	ePoints utils.Point
 	content rune
 	visible bool
+	Boxes   *[]*BoxHolder // each box will have a reference of the board
 }
 
 func CreateBoxHolder(startPoint utils.Point, scale int) *BoxHolder {
@@ -26,6 +29,14 @@ func CreateBoxHolder(startPoint utils.Point, scale int) *BoxHolder {
 		visible: false,
 	}
 	return &boxHolder
+}
+
+func (b *BoxHolder) GetContent() rune {
+	return b.content
+}
+
+func (b *BoxHolder) SetBoxes(boxes *[]*BoxHolder) {
+	b.Boxes = boxes
 }
 
 func (b *BoxHolder) InputEvents(event tcell.Event, gc *game.GameContext) {
@@ -48,6 +59,11 @@ func (b *BoxHolder) InputEvents(event tcell.Event, gc *game.GameContext) {
 					}
 					// and
 					b.visible = !b.visible
+
+					// needs refactor
+					if b.TicTacToePatternsNew(b.content) { // if win reset the game.
+						fmt.Printf("Win: %c", b.content)
+					}
 				}
 			}
 		}
@@ -111,4 +127,33 @@ func (b *BoxHolder) Draw(gs *game.GameContext) {
 	for i := 1; i < b.GetBoxWidth(); i++ {
 		gs.Window.SetContent(b.GetBottomLeftCoords().X+i, b.GetBottomLeftCoords().Y, tcell.RuneHLine)
 	}
+}
+
+// new version
+//
+// Each box should have a ref of all boxes, that is easier to check on very turn, since
+// each box has its own inputevents too.
+
+func (b *BoxHolder) TicTacToePatternsNew(content rune) bool {
+	winPatterns := [8][3]int{
+		{0, 1, 2},
+		{3, 4, 5},
+		{6, 7, 8},
+		{0, 3, 6},
+		{1, 4, 7},
+		{2, 5, 8},
+		{0, 4, 8},
+		{2, 4, 6},
+	}
+
+	board := *b.Boxes
+	for _, pattern := range winPatterns {
+		if board[pattern[0]].content == content &&
+			board[pattern[1]].content == content &&
+			board[pattern[2]].content == content {
+			return true
+		}
+	}
+
+	return false
 }
