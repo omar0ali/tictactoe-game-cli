@@ -10,6 +10,7 @@ A simple terminal-based implementation of the classic **TicTacToe** game written
     - [X] Ensure all boxes are centered.
     - [X] GridView created and can draw list of boxes.
 - [ ] Player Scores when win pattern correct and reset.
+    - [X] The game show who wins the game `X` or `O` at the end of every match.
 - [ ] Clear or Restart game when pressing i.e `r` key.
 - [ ] Show logs and current Turn.
 
