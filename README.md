@@ -2,7 +2,7 @@
 
 A simple terminal-based implementation of the classic **TicTacToe** game written in **Go**, using the [`tcell`](https://github.com/gdamore/tcell) library for handling terminal graphics and input.
 
-![TicTacToe Game](https://github.com/omar0ali/tictactoe-game-cli/blob/main/screenshots/tictactoe-game-cli.png "TicTacToe Game")
+![TicTacToe Game](https://github.com/omar0ali/tictactoe-game-cli/blob/main/screenshots/tictactoe-game-cli.png)
 
 ## TODOS
 - [x] Implement a window Object (tcell screen), ready to be drawn on the screen.
@@ -13,8 +13,11 @@ A simple terminal-based implementation of the classic **TicTacToe** game written
     - [X] GridView created and can draw list of boxes.
 - [ ] Player Scores when win pattern correct and reset.
     - [X] The game show who wins the game `X` or `O` at the end of every match.
-- [ ] Clear or Restart game when pressing i.e `r` key.
-- [ ] Show logs and current Turn.
+    - [ ] Color the Winner.
+- [ ] Show logs and current Turn. (Should be shown on the bottom-right of screen).
+- [ ] After each end of the game, should should a dialog, showing the winner and asking to restart,
+the game or exit. (Should be shown at the bottom of the screen).
+    - [X] Dialog Box added
 
 ## Getting Started
 
