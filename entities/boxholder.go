@@ -60,9 +60,9 @@ func (b *BoxHolder) InputEvents(event tcell.Event, gc *game.GameContext) {
 					// and
 					b.visible = !b.visible
 
-					// needs refactor
 					if b.TicTacToePatternsNew(b.content) { // if win reset the game.
-						fmt.Printf("Win: %c", b.content)
+						gc.Dialog.AddLine(fmt.Sprintf("The winner player | %c", b.content))
+						gc.Dialog.SetVisible(true)
 					}
 				}
 			}

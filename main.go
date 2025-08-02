@@ -19,7 +19,7 @@ func main() {
 	dialog.AddLine("TicTacToe Game")
 	dialog.AddLine("Instructions:")
 	dialog.AddLine("'c' key to close any dialog window. to quit the game 'q' or 'ESC'")
-	gameState := game.GameContext{Window: &window, PlayerTurn: game.P1, Dialog: dialog}
+	gameState := game.GameContext{Window: &window, PlayerTurn: game.P1, Dialog: &dialog}
 
 	// Add boxes on screen
 	boxes := []*entities.BoxHolder{}
