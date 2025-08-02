@@ -15,8 +15,8 @@ A simple terminal-based implementation of the classic **TicTacToe** game written
     - [X] The game show who wins the game `X` or `O` at the end of every match.
     - [ ] Color the Winner.
 - [ ] Show logs and current Turn. (Should be shown on the bottom-right of screen).
-- [ ] After each end of the game, should should a dialog, showing the winner and asking to restart,
-the game or exit. (Should be shown at the bottom of the screen).
+- [X] After each end of the game, should should a dialog, showing the winner 
+- [ ] Ask player to restart the game or exit.
     - [X] Dialog Box added
 
 ## Getting Started
