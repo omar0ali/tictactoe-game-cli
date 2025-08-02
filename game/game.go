@@ -23,6 +23,7 @@ type (
 		Window     *core.Window
 		entities   []Entity
 		PlayerTurn PlayerTurn
+		Dialog     Dialog
 	}
 )
 

@@ -14,9 +14,14 @@ func main() {
 	// exit channel waiting to get a an exit signal == 0 from either Events() or Update()
 	exit := make(chan int)
 
-	gridView := views.InitGridView(9, 1, 4, 3, &window)
-	gameState := game.GameContext{Window: &window, PlayerTurn: game.P1}
+	gridView := views.InitGridView(9, 1, 4, 3, &window) // grid system
+	dialog := game.InitDialog(10, window.Screen)        // dialog enabled
+	dialog.AddLine("TicTacToe Game")
+	dialog.AddLine("Instructions:")
+	dialog.AddLine("'c' key to close any dialog window. to quit the game 'q' or 'ESC'")
+	gameState := game.GameContext{Window: &window, PlayerTurn: game.P1, Dialog: dialog}
 
+	// Add boxes on screen
 	boxes := []*entities.BoxHolder{}
 	for i := range gridView.GetItems() {
 		box := gridView.GetItems()[i]              // get each box
@@ -29,6 +34,9 @@ func main() {
 		boxHolder.SetBoxes(&boxes)       // each box should have a ref of all the boxes. Helps to check
 		// who wins after each turn
 	}
+
+	// Add Dialog on screen.
+	gameState.AddEntity(&dialog)
 
 	window.Events(exit,
 		func(event tcell.Event) {
