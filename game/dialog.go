@@ -94,8 +94,13 @@ func (d *Dialog) Draw(gs *GameContext) {
 			screen.SetContent(d.startX+x+1, (height/2)+y+1, ' ', nil, style)
 		}
 	}
-	for x, v := range []rune("To close window press 'c'.") {
-		screen.SetContent(d.startX+x+1, maxHeight+(height/2)+2, v, nil, style)
+	x := 0
+	displayText := []rune("To close window press 'c'.")
+	for ; x < len(displayText); x++ {
+		screen.SetContent(d.startX+x+1, maxHeight+(height/2)+2, displayText[x], nil, style)
+	}
+	for ; x < distance; x++ {
+		screen.SetContent(d.startX+x+1, maxHeight+(height/2)+2, ' ', nil, style)
 	}
 }
 

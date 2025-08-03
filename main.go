@@ -17,8 +17,8 @@ func main() {
 	gridView := views.InitGridView(9, 1, 4, 3, &window) // grid system
 	dialog := game.InitDialog(10, window.Screen)        // dialog enabled
 	dialog.AddLine("TicTacToe Game")
-	dialog.AddLine("Instructions:")
-	dialog.AddLine("'c' key to close any dialog window. to quit the game 'q' or 'ESC'")
+	dialog.AddLine("--------")
+	dialog.AddLine("* Press 'c' key to close any dialog window. to quit the game 'q' or 'ESC'")
 	gameState := game.GameContext{Window: &window, PlayerTurn: game.P1, Dialog: &dialog}
 
 	// Add boxes on screen
@@ -40,6 +40,13 @@ func main() {
 
 	window.Events(exit,
 		func(event tcell.Event) {
+			switch ev := event.(type) {
+			case *tcell.EventKey:
+				if ev.Rune() == 'r' {
+					// restarting the game
+					entities.RestartGame(&gameState, &boxes)
+				}
+			}
 			for _, entity := range gameState.GetEntities() {
 				entity.InputEvents(event, &gameState)
 			}
