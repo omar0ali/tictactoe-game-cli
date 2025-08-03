@@ -61,12 +61,24 @@ func (b *BoxHolder) InputEvents(event tcell.Event, gc *game.GameContext) {
 					b.visible = !b.visible
 
 					if b.TicTacToePatternsNew(b.content) { // if win reset the game.
-						gc.Dialog.AddLine(fmt.Sprintf("The winner player | %c", b.content))
+						gc.Dialog.AddLine(fmt.Sprintf("* The winner player | %c", b.content))
+						gc.Dialog.AddLine("* You can press 'r' key to restart the game at any time.")
+						gc.Dialog.AddLine("* Press 'q' to quit.")
 						gc.Dialog.SetVisible(true)
+						RestartGame(gc, b.Boxes)
 					}
 				}
 			}
 		}
+	}
+}
+
+func RestartGame(gc *game.GameContext, boxes *[]*BoxHolder) {
+	// rest the game
+	gc.PlayerTurn = game.P1
+	for _, v := range *boxes {
+		v.visible = false
+		v.content = ' '
 	}
 }
 
