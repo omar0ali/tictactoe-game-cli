@@ -11,12 +11,13 @@ A simple terminal-based implementation of the classic **TicTacToe** game written
 - [X] Set 9 boxes in the middle of the screen.
     - [X] Ensure all boxes are centered.
     - [X] GridView created and can draw list of boxes.
-- [ ] Player Scores when win pattern correct and reset.
     - [X] The game show who wins the game `X` or `O` at the end of every match.
-- [ ] Show logs and current Turn. (Should be shown on the bottom-right of screen).
+- [ ] Show logs and current Turn. Status (Should be shown on the bottom of screen).
 - [X] After each end of the game, should should a dialog, showing the winner 
 - [X] Ask player to restart the game or exit.
     - [X] Dialog Box added
+- [ ] Will make a menu to start the game and select two options (single player and multiplayer)
+    - [ ] Single-player with [MiniMax](https://en.wikipedia.org/wiki/Minimax) algorithm (will try to implement)
 
 ## Getting Started
 
