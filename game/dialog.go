@@ -53,33 +53,33 @@ func (d *Dialog) Draw(gs *GameContext) {
 	screen := gs.Window.Screen
 	style := tcell.StyleDefault.Background(tcell.ColorReset).Foreground(tcell.ColorWhite)
 	_, height := screen.Size()
-	height = height / 2
 	maxHeight := len(d.lines)
+	height = height - maxHeight - 3
 
 	// corners
-	screen.SetContent(d.startX, height/2, tcell.RuneULCorner, nil, style)
-	screen.SetContent(d.endX, height/2, tcell.RuneURCorner, nil, style)
-	screen.SetContent(d.startX, maxHeight+(height/2)+1, tcell.RuneLLCorner, nil, style)
-	screen.SetContent(d.endX, maxHeight+(height/2)+1, tcell.RuneLRCorner, nil, style)
+	screen.SetContent(d.startX, height, tcell.RuneULCorner, nil, style)
+	screen.SetContent(d.endX, height, tcell.RuneURCorner, nil, style)
+	screen.SetContent(d.startX, maxHeight+height+1, tcell.RuneLLCorner, nil, style)
+	screen.SetContent(d.endX, maxHeight+(height)+1, tcell.RuneLRCorner, nil, style)
 
 	// top line
 	distance := d.endX - d.startX - 1
 	for i := range distance {
-		screen.SetContent(d.startX+i+1, height/2, tcell.RuneHLine, nil, style)
+		screen.SetContent(d.startX+i+1, height, tcell.RuneHLine, nil, style)
 	}
 
 	// bottom line
 	for i := range distance {
-		screen.SetContent(d.startX+i+1, maxHeight+(height/2)+1, tcell.RuneHLine, nil, style)
+		screen.SetContent(d.startX+i+1, maxHeight+(height)+1, tcell.RuneHLine, nil, style)
 	}
 
 	// left line
 	for i := range maxHeight {
-		screen.SetContent(d.startX, (height/2)+i+1, tcell.RuneVLine, nil, style)
+		screen.SetContent(d.startX, (height)+i+1, tcell.RuneVLine, nil, style)
 	}
 	// right line
 	for i := range maxHeight {
-		screen.SetContent(d.endX, (height/2)+i+1, tcell.RuneVLine, nil, style)
+		screen.SetContent(d.endX, (height)+i+1, tcell.RuneVLine, nil, style)
 	}
 
 	// Draw Text
@@ -87,20 +87,20 @@ func (d *Dialog) Draw(gs *GameContext) {
 		runes := []rune(line)
 		x := 0
 		for ; x < len(runes); x++ {
-			screen.SetContent(d.startX+x+1, (height/2)+y+1, runes[x], nil, style)
+			screen.SetContent(d.startX+x+1, (height)+y+1, runes[x], nil, style)
 		}
 		// this will just fill empy spaces on the line to cover or hide whats behind it.
 		for ; x < distance; x++ {
-			screen.SetContent(d.startX+x+1, (height/2)+y+1, ' ', nil, style)
+			screen.SetContent(d.startX+x+1, (height)+y+1, ' ', nil, style)
 		}
 	}
 	x := 0
-	displayText := []rune("To close window press 'c'.")
+	displayText := []rune("'c' Close Window")
 	for ; x < len(displayText); x++ {
-		screen.SetContent(d.startX+x+1, maxHeight+(height/2)+2, displayText[x], nil, style)
+		screen.SetContent(d.startX+x+1, maxHeight+(height)+2, displayText[x], nil, style)
 	}
 	for ; x < distance; x++ {
-		screen.SetContent(d.startX+x+1, maxHeight+(height/2)+2, ' ', nil, style)
+		screen.SetContent(d.startX+x+1, maxHeight+(height)+2, ' ', nil, style)
 	}
 }
 

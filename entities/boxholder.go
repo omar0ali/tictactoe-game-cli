@@ -60,7 +60,7 @@ func (b *BoxHolder) InputEvents(event tcell.Event, gc *game.GameContext) {
 					// and
 					b.visible = !b.visible
 
-					if b.TicTacToePatternsNew(b.content) { // if win reset the game.
+					if b.TicTacToePatterns(b.content) { // if win reset the game.
 						gc.Dialog.AddLine(fmt.Sprintf("* The winner player | %c", b.content))
 						gc.Dialog.AddLine("* You can press 'r' key to restart the game at any time.")
 						gc.Dialog.AddLine("* Press 'q' to quit.")
@@ -141,12 +141,10 @@ func (b *BoxHolder) Draw(gs *game.GameContext) {
 	}
 }
 
-// new version
-//
 // Each box should have a ref of all boxes, that is easier to check on very turn, since
 // each box has its own inputevents too.
 
-func (b *BoxHolder) TicTacToePatternsNew(content rune) bool {
+func (b *BoxHolder) TicTacToePatterns(content rune) bool {
 	winPatterns := [8][3]int{
 		{0, 1, 2},
 		{3, 4, 5},
