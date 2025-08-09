@@ -4,6 +4,8 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
+const MaxLogsHeight int = 5
+
 type Distance struct {
 	StartX, EndX int
 }
@@ -78,7 +80,7 @@ func (d *Dialog) Update(gs *GameContext) {}
 
 func (d *Dialog) GetScreenHightPosition() (int, int) {
 	_, screenHeight := (*d.screen).Size()
-	maxHeight := len(d.lines)
+	maxHeight := min(len(d.lines), MaxLogsHeight)
 	height := 0
 	switch d.Position {
 	case TopCenter, TopRight, TopLeft:
@@ -123,7 +125,13 @@ func (d *Dialog) Draw(gs *GameContext) {
 	}
 
 	// Draw Text
-	for y, line := range d.lines {
+	start := 0
+	if d.Log {
+		if len(d.lines) > MaxLogsHeight {
+			start = len(d.lines) - MaxLogsHeight
+		}
+	}
+	for y, line := range d.lines[start:] {
 		runes := []rune(line)
 		x := 0
 		for ; x < len(runes); x++ {
