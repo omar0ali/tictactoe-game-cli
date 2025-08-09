@@ -12,7 +12,8 @@ A simple terminal-based implementation of the classic **TicTacToe** game written
     - [X] Ensure all boxes are centered.
     - [X] GridView created and can draw list of boxes.
     - [X] The game show who wins the game `X` or `O` at the end of every match.
-- [ ] Show logs and current Turn. Status (Should be shown on the bottom of screen).
+- [X] Show logs and current Turn. Status (Should be shown on the bottom of screen).
+    - [ ] Need to limit height of the Logs window.
 - [X] After each end of the game, should should a dialog, showing the winner 
 - [X] Ask player to restart the game or exit.
     - [X] Dialog Box added
