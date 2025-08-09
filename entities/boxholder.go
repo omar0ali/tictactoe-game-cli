@@ -91,7 +91,9 @@ func RestartGame(gc *game.GameContext, boxes *[]*BoxHolder, player int) {
 	}
 	if gc.Logs.Log {
 		gc.Logs.ClearLines()
-		gc.Logs.AddLine(fmt.Sprintf("Player Won: P%d", player))
+		if player != 0 {
+			gc.Logs.AddLine(fmt.Sprintf("Player Won: P%d", player))
+		}
 		gc.Logs.AddLine("Start New Game")
 	}
 }
