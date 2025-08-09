@@ -44,7 +44,8 @@ func InitDialog(maxWidth int, position Position, screen tcell.Screen) Dialog {
 	case BottomRight, TopRight:
 		sX = width - minWidth - 1
 	}
-	dialog := Dialog{
+
+	return Dialog{
 		Distance: Distance{
 			sX, sX + minWidth,
 		},
@@ -52,7 +53,6 @@ func InitDialog(maxWidth int, position Position, screen tcell.Screen) Dialog {
 		Position: position,
 		screen:   &screen,
 	}
-	return dialog
 }
 
 func (d *Dialog) AddLine(text string) {

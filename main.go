@@ -14,12 +14,17 @@ func main() {
 	// exit channel waiting to get a an exit signal == 0 from either Events() or Update()
 	exit := make(chan int)
 
-	gridView := views.InitGridView(9, 1, 4, 3, &window)         // grid system
-	dialog := game.InitDialog(10, game.TopRight, window.Screen) // dialog enabled
+	gridView := views.InitGridView(9, 1, 4, 3, &window)             // grid system
+	dialog := game.InitDialog(10, game.BottomCenter, window.Screen) // dialog enabled
+
+	logs := game.InitDialog(10, game.TopRight, window.Screen)
+	logs.Log = true
+	logs.AddLine("Start Game")
+
 	dialog.AddLine("TicTacToe Game")
 	dialog.AddLine("--------")
 	dialog.AddLine("* Press 'c' key to close any dialog window. to quit the game 'q' or 'ESC'")
-	gameState := game.GameContext{Window: &window, PlayerTurn: game.P1, Dialog: &dialog}
+	gameState := game.GameContext{Window: &window, PlayerTurn: game.P1, Dialog: &dialog, Logs: &logs}
 
 	// Add boxes on screen
 	boxes := []*entities.BoxHolder{}
@@ -37,6 +42,7 @@ func main() {
 
 	// Add Dialog on screen.
 	gameState.AddEntity(&dialog)
+	gameState.AddEntity(&logs)
 
 	window.Events(exit,
 		func(event tcell.Event) {
@@ -44,7 +50,7 @@ func main() {
 			case *tcell.EventKey:
 				if ev.Rune() == 'r' {
 					// restarting the game
-					entities.RestartGame(&gameState, &boxes)
+					entities.RestartGame(&gameState, &boxes, 0)
 				}
 			}
 			for _, entity := range gameState.GetEntities() {

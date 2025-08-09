@@ -52,9 +52,11 @@ func (b *BoxHolder) InputEvents(event tcell.Event, gc *game.GameContext) {
 					switch gc.PlayerTurn {
 					case game.P1:
 						b.content = 'X'
+						gc.Logs.AddLine("Player 2 Turn")
 						gc.PlayerTurn = game.P2
 					case game.P2:
 						b.content = 'O'
+						gc.Logs.AddLine("Player 1 Turn")
 						gc.PlayerTurn = game.P1
 					}
 					// and
@@ -65,7 +67,7 @@ func (b *BoxHolder) InputEvents(event tcell.Event, gc *game.GameContext) {
 						gc.Dialog.AddLine("* You can press 'r' key to restart the game at any time.")
 						gc.Dialog.AddLine("* Press 'q' to quit.")
 						gc.Dialog.SetVisible(true)
-						RestartGame(gc, b.Boxes)
+						RestartGame(gc, b.Boxes, b.GetWinningPlayer(b.content))
 					}
 				}
 			}
@@ -73,12 +75,24 @@ func (b *BoxHolder) InputEvents(event tcell.Event, gc *game.GameContext) {
 	}
 }
 
-func RestartGame(gc *game.GameContext, boxes *[]*BoxHolder) {
+func (b *BoxHolder) GetWinningPlayer(content rune) int {
+	if content == 'X' {
+		return int(game.P1)
+	}
+	return int(game.P2)
+}
+
+func RestartGame(gc *game.GameContext, boxes *[]*BoxHolder, player int) {
 	// rest the game
 	gc.PlayerTurn = game.P1
 	for _, v := range *boxes {
 		v.visible = false
 		v.content = ' '
+	}
+	if gc.Logs.Log {
+		gc.Logs.ClearLines()
+		gc.Logs.AddLine(fmt.Sprintf("Player Won: P%d", player))
+		gc.Logs.AddLine("Start New Game")
 	}
 }
 

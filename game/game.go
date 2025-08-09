@@ -24,6 +24,7 @@ type (
 		entities   []Entity
 		PlayerTurn PlayerTurn
 		Dialog     *Dialog
+		Logs       *Dialog
 	}
 )
 
