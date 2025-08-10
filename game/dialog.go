@@ -165,5 +165,13 @@ func (d *Dialog) InputEvents(event tcell.Event, gc *GameContext) {
 			d.visible = false
 			d.ClearLines()
 		}
+		// remove dialog window from the game
+		if ev.Rune() == 'h' {
+			gc.RemoveEntity(d)
+		}
 	}
+}
+
+func (d *Dialog) IsVisible() bool {
+	return d.visible
 }

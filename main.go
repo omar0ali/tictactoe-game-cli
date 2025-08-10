@@ -15,15 +15,16 @@ func main() {
 	exit := make(chan int)
 
 	gridView := views.InitGridView(9, 1, 4, 3, &window)             // grid system
-	dialog := game.InitDialog(10, game.BottomCenter, window.Screen) // dialog enabled
+	dialog := game.InitDialog(70, game.BottomCenter, window.Screen) // dialog enabled
 
 	logs := game.InitDialog(10, game.TopRight, window.Screen)
 	logs.Log = true
 	logs.AddLine("Start Game")
 
 	dialog.AddLine("TicTacToe Game")
-	dialog.AddLine("--------")
-	dialog.AddLine("* Press 'c' key to close any dialog window. to quit the game 'q' or 'ESC'")
+	dialog.AddLine("-----------")
+	dialog.AddLine("* Press 'c' key to close any dialog window. to quit the game 'q' or 'ESC'.")
+	dialog.AddLine("* Press 'h' key to to disable dialog dialog window.")
 	gameState := game.GameContext{Window: &window, PlayerTurn: game.P1, Dialog: &dialog, Logs: &logs}
 
 	// Add boxes on screen

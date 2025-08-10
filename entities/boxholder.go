@@ -63,6 +63,9 @@ func (b *BoxHolder) InputEvents(event tcell.Event, gc *game.GameContext) {
 					b.visible = !b.visible
 
 					if b.TicTacToePatterns(b.content) { // if win reset the game.
+						if gc.Dialog.IsVisible() {
+							gc.Dialog.ClearLines()
+						}
 						gc.Dialog.AddLine(fmt.Sprintf("* The winner player | %c", b.content))
 						gc.Dialog.AddLine("* You can press 'r' key to restart the game at any time.")
 						gc.Dialog.AddLine("* Press 'q' to quit.")

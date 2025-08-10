@@ -32,6 +32,15 @@ func (gs *GameContext) AddEntity(entity ...Entity) {
 	gs.entities = append(gs.entities, entity...)
 }
 
+func (gs *GameContext) RemoveEntity(entity Entity) {
+	for i, v := range gs.entities {
+		if v == entity {
+			gs.entities = append(gs.entities[:i], gs.entities[i+1:]...)
+			return
+		}
+	}
+}
+
 func (gs *GameContext) GetEntities() []Entity {
 	return gs.entities
 }
