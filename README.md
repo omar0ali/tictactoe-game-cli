@@ -2,7 +2,7 @@
 
 A simple terminal-based implementation of the classic **TicTacToe** game written in **Go**, using the [`tcell`](https://github.com/gdamore/tcell) library for handling terminal graphics and input.
 
-![TicTacToe Game](https://github.com/omar0ali/tictactoe-game-cli/blob/main/screenshots/tictactoe-game-cli.png)
+![TicTacToe Game](https://github.com/omar0ali/tictactoe-game-cli/blob/main/screenshots/tictactoe-game-cli.png?v=2)
 
 ## TODOS
 - [x] Implement a window Object (tcell screen), ready to be drawn on the screen.
