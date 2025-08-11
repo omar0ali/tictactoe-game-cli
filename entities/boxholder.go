@@ -9,12 +9,16 @@ import (
 	"github.com/omar0ali/tictactoe-game-cli/utils"
 )
 
+var id int = 0
+
 type BoxHolder struct {
+	ID      int
 	sPoints utils.Point
 	ePoints utils.Point
 	content rune
 	visible bool
 	Boxes   *[]*BoxHolder // each box will have a reference of the board
+	disable bool
 }
 
 func CreateBoxHolder(startPoint utils.Point, scale int) *BoxHolder {
@@ -24,10 +28,13 @@ func CreateBoxHolder(startPoint utils.Point, scale int) *BoxHolder {
 	endX := startPoint.X + minimum
 	endY := startPoint.Y + minimum - 2
 	boxHolder := BoxHolder{
+		ID:      id,
 		sPoints: utils.Point{X: startX, Y: startY},
 		ePoints: utils.Point{X: endX, Y: endY},
 		visible: false,
+		disable: false,
 	}
+	id++
 	return &boxHolder
 }
 
@@ -39,39 +46,68 @@ func (b *BoxHolder) SetBoxes(boxes *[]*BoxHolder) {
 	b.Boxes = boxes
 }
 
+func DisabledBoxes(boxes *[]*BoxHolder) {
+	for _, box := range *boxes {
+		box.disable = true
+	}
+}
+
+func EnableBoxes(boxes *[]*BoxHolder) {
+	for _, box := range *boxes {
+		box.disable = false
+	}
+}
+
+func (b *BoxHolder) switchTurn(gc *game.GameContext) {
+	if gc.PlayerTurn == game.P1 {
+		b.content = 'X'
+		gc.PlayerTurn = game.P2
+	} else {
+		b.content = 'O'
+		gc.PlayerTurn = game.P1
+	}
+
+	b.visible = !b.visible
+
+	gc.Logs.AddLine(
+		fmt.Sprintf("Place: %c | Box: %d", b.content, b.ID),
+	)
+
+	if b.IsTerminal(b.content) {
+		if gc.Dialog.IsVisible() {
+			gc.Dialog.ClearLines()
+		}
+		gc.Logs.AddLine(fmt.Sprintf("* Winner: %c", b.content))
+		gc.Dialog.AddLine("* You can press 'r' key to restart the game at any time.")
+		gc.Dialog.AddLine("* Press 'q' to quit.")
+		gc.Dialog.SetVisible(true)
+		DisabledBoxes(b.Boxes)
+		return
+	}
+
+	gc.Logs.AddLine("--------------")
+
+	if gc.PlayerTurn == game.P1 {
+		gc.Logs.AddLine("Turn: Player 1")
+	} else {
+		gc.Logs.AddLine("Turn: Player 2")
+	}
+}
+
 func (b *BoxHolder) InputEvents(event tcell.Event, gc *game.GameContext) {
 	switch ev := event.(type) {
 	case *tcell.EventMouse:
 		if ev.Buttons() == tcell.Button1 {
+			if b.disable {
+				return
+			}
 			if b.visible {
 				return
 			}
 			mouseX, mouseY := ev.Position()
 			if mouseX >= b.sPoints.X && mouseY >= b.sPoints.Y {
 				if mouseX <= b.ePoints.X && mouseY <= b.ePoints.Y {
-					switch gc.PlayerTurn {
-					case game.P1:
-						b.content = 'X'
-						gc.Logs.AddLine("Player 2 Turn")
-						gc.PlayerTurn = game.P2
-					case game.P2:
-						b.content = 'O'
-						gc.Logs.AddLine("Player 1 Turn")
-						gc.PlayerTurn = game.P1
-					}
-					// and
-					b.visible = !b.visible
-
-					if b.TicTacToePatterns(b.content) { // if win reset the game.
-						if gc.Dialog.IsVisible() {
-							gc.Dialog.ClearLines()
-						}
-						gc.Dialog.AddLine(fmt.Sprintf("* The winner player | %c", b.content))
-						gc.Dialog.AddLine("* You can press 'r' key to restart the game at any time.")
-						gc.Dialog.AddLine("* Press 'q' to quit.")
-						gc.Dialog.SetVisible(true)
-						RestartGame(gc, b.Boxes, b.GetWinningPlayer(b.content))
-					}
+					b.switchTurn(gc)
 				}
 			}
 		}
@@ -163,7 +199,7 @@ func (b *BoxHolder) Draw(gs *game.GameContext) {
 // Each box should have a ref of all boxes, that is easier to check on very turn, since
 // each box has its own inputevents too.
 
-func (b *BoxHolder) TicTacToePatterns(content rune) bool {
+func (b *BoxHolder) IsTerminal(content rune) bool {
 	winPatterns := [8][3]int{
 		{0, 1, 2},
 		{3, 4, 5},
