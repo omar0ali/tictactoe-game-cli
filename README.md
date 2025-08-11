@@ -18,8 +18,7 @@ A simple terminal-based implementation of the classic **TicTacToe** game written
 - [X] Ask player to restart the game or exit.
     - [X] Dialog Box added
 - [X] Disable dialog windows with `h` key.
-- [ ] Will make a menu to start the game and select two options (single player and multiplayer)
-    - [ ] Single-player with [MiniMax](https://en.wikipedia.org/wiki/Minimax) algorithm (will try to implement)
+- [ ] Single-player with [MiniMax](https://en.wikipedia.org/wiki/Minimax) algorithm (will try to implement)
 
 ## Getting Started
 

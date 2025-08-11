@@ -18,12 +18,14 @@ func main() {
 	dialog := game.InitDialog(70, game.BottomCenter, window.Screen, "[Window]") // dialog enabled
 
 	logs := game.InitDialog(10, game.TopRight, window.Screen, "[Logs]")
-	logs.Log = true
-	logs.AddLine("Start Game")
 
-	dialog.AddLine("[TicTacToe Game]")
-	dialog.AddLine("* Press 'c' key to close any dialog window. to quit the game 'q' or 'ESC'.")
-	dialog.AddLine("* Press 'h' key to to disable dialog dialog window.")
+	logs.Log = true
+
+	logs.AddLine("Start Game")
+	dialog.AddLine("===[TicTacToe Game]===")
+	dialog.AddLine("* Press 'c' key to close a window.")
+	dialog.AddLine("* Press 'q' or 'ESC' to quit.")
+	dialog.AddLine("* Press 'h' key to to disable dialog window.")
 	gameState := game.GameContext{Window: &window, PlayerTurn: game.P1, Dialog: &dialog, Logs: &logs}
 
 	// Add boxes on screen
