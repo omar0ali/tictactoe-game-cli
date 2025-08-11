@@ -4,7 +4,7 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
-const MaxLogsHeight int = 5
+const MaxLogsHeight int = 8
 
 type Distance struct {
 	StartX, EndX int
@@ -32,9 +32,10 @@ type Dialog struct {
 	visible  bool
 	Log      bool
 	screen   *tcell.Screen
+	title    string
 }
 
-func InitDialog(maxWidth int, position Position, screen tcell.Screen) Dialog {
+func InitDialog(maxWidth int, position Position, screen tcell.Screen, title string) Dialog {
 	minWidth := max(maxWidth, 40)
 	width, _ := screen.Size()
 	var sX int
@@ -54,6 +55,7 @@ func InitDialog(maxWidth int, position Position, screen tcell.Screen) Dialog {
 		visible:  true,
 		Position: position,
 		screen:   &screen,
+		title:    title,
 	}
 }
 
@@ -105,8 +107,14 @@ func (d *Dialog) Draw(gs *GameContext) {
 	screen.SetContent(d.Distance.EndX, maxHeight+(height)+1, tcell.RuneLRCorner, nil, style)
 
 	// top line
+	// need to add the title
 	distance := d.Distance.GetMaxWidth()
+	title := []rune(d.title)
 	for i := range distance {
+		if i > -1 && i < len(title) {
+			screen.SetContent(d.Distance.StartX+i+1, height, title[i], nil, style)
+			continue
+		}
 		screen.SetContent(d.Distance.StartX+i+1, height, tcell.RuneHLine, nil, style)
 	}
 
@@ -146,7 +154,7 @@ func (d *Dialog) Draw(gs *GameContext) {
 		return
 	}
 	x := 0
-	displayText := []rune("'c' Close Window")
+	displayText := []rune("[c] Close Window")
 	for ; x < len(displayText); x++ {
 		screen.SetContent(d.Distance.StartX+x+1, maxHeight+(height)+2, displayText[x], nil, style)
 	}
