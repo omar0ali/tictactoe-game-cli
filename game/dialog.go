@@ -4,7 +4,7 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
-const MaxLogsHeight int = 8
+const MaxLogsHeight int = 10
 
 type Distance struct {
 	StartX, EndX int
