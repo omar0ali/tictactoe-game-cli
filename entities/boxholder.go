@@ -17,7 +17,6 @@ type BoxHolder struct {
 	ePoints utils.Point
 	content rune
 	visible bool
-	Boxes   *[]*BoxHolder // each box will have a reference of the board
 	disable bool
 }
 
@@ -40,22 +39,6 @@ func CreateBoxHolder(startPoint utils.Point, scale int) *BoxHolder {
 
 func (b *BoxHolder) GetContent() rune {
 	return b.content
-}
-
-func (b *BoxHolder) SetBoxes(boxes *[]*BoxHolder) {
-	b.Boxes = boxes
-}
-
-func DisabledBoxes(boxes *[]*BoxHolder) {
-	for _, box := range *boxes {
-		box.disable = true
-	}
-}
-
-func EnableBoxes(boxes *[]*BoxHolder) {
-	for _, box := range *boxes {
-		box.disable = false
-	}
 }
 
 func (b *BoxHolder) switchTurn(gc *game.GameContext) {
@@ -81,7 +64,7 @@ func (b *BoxHolder) switchTurn(gc *game.GameContext) {
 		gc.Dialog.AddLine("* You can press 'r' key to restart the game at any time.")
 		gc.Dialog.AddLine("* Press 'q' to quit.")
 		gc.Dialog.SetVisible(true)
-		DisabledBoxes(b.Boxes)
+		DisabledBoxes()
 		return
 	}
 
@@ -211,7 +194,7 @@ func (b *BoxHolder) IsTerminal(content rune) bool {
 		{2, 4, 6},
 	}
 
-	board := *b.Boxes
+	board := GetBoxes()
 	for _, pattern := range winPatterns {
 		if board[pattern[0]].content == content &&
 			board[pattern[1]].content == content &&

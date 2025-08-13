@@ -38,9 +38,9 @@ func main() {
 		}
 		gameState.AddEntity(boxHolder)   // add it as an entity
 		boxes = append(boxes, boxHolder) // this boxes used later | To check for winers
-		boxHolder.SetBoxes(&boxes)       // each box should have a ref of all the boxes. Helps to check
-		// who wins after each turn
 	}
+
+	entities.SetBoxes(boxes) // each box should have a ref of all the boxes. Helps to check
 
 	// Add Dialog on screen.
 	gameState.AddEntity(&dialog)
@@ -53,7 +53,7 @@ func main() {
 				if ev.Rune() == 'r' {
 					// restarting the game
 					entities.RestartGame(&gameState, &boxes, 0)
-					entities.EnableBoxes(&boxes)
+					entities.EnableBoxes()
 				}
 			}
 			for _, entity := range gameState.GetEntities() {
