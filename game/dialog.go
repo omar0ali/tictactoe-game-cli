@@ -109,18 +109,10 @@ func (d *Dialog) Draw(gs *GameContext) {
 	// top line
 	// need to add the title
 	distance := d.Distance.GetMaxWidth()
-	title := []rune(d.title)
+	title := []rune("[" + d.title + "]")
 	for i := range distance {
-		if i >= 0 && i < len(title)+1 {
-			if i == 0 { // opening bracket for the title
-				screen.SetContent(d.Distance.StartX+i+1, height, '[', nil, style)
-				continue
-			}
-			screen.SetContent(d.Distance.StartX+i+1, height, title[i-1], nil, style)
-			continue
-		}
-		if i == len(title)+1 { // closing bracket for the title
-			screen.SetContent(d.Distance.StartX+i+1, height, ']', nil, style)
+		if i >= 0 && i < len(title) {
+			screen.SetContent(d.Distance.StartX+i+1, height, title[i], nil, style)
 			continue
 		}
 		screen.SetContent(d.Distance.StartX+i+1, height, tcell.RuneHLine, nil, style)
