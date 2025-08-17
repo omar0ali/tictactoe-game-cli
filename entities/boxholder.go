@@ -43,6 +43,7 @@ func (b *BoxHolder) GetContent() rune {
 
 func CheckGame(gc *game.GameContext, b *BoxHolder) bool {
 	status, win := IsTerminal()
+	gc.Logs.AddLine(fmt.Sprintf("Place: %c | Box: %d", b.content, b.ID))
 	if status {
 		if win != 0 {
 			gc.Logs.AddLine(fmt.Sprintf("* Winner: %c", b.content))
@@ -56,7 +57,6 @@ func CheckGame(gc *game.GameContext, b *BoxHolder) bool {
 		gc.Dialog.SetVisible(true)
 		return status
 	}
-	gc.Logs.AddLine(fmt.Sprintf("Place: %c | Box: %d", b.content, b.ID))
 	gc.Logs.AddLine("--------------")
 	if gc.PlayerTurn == game.P1 {
 		gc.Logs.AddLine("Turn: Player 1")
