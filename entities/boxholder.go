@@ -50,6 +50,7 @@ func (b *BoxHolder) CheckGame(gc *game.GameContext) bool {
 		} else {
 			gc.Logs.AddLine("* Draw")
 		}
+		gc.Dialog.ClearLines()
 		gc.Dialog.AddLine("* You can press 'r' key to restart the game at any time.")
 		gc.Dialog.AddLine("* Press 'q' to quit.")
 		gc.Dialog.SetVisible(true)
