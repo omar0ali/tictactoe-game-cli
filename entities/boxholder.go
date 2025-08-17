@@ -56,7 +56,9 @@ func (b *BoxHolder) switchTurn(gc *game.GameContext) {
 		fmt.Sprintf("Place: %c | Box: %d", b.content, b.ID),
 	)
 
-	if b.IsTerminal(b.content) {
+	status, win := b.IsTerminal()
+
+	if status && win != 0 {
 		if gc.Dialog.IsVisible() {
 			gc.Dialog.ClearLines()
 		}
@@ -102,22 +104,6 @@ func (b *BoxHolder) GetWinningPlayer(content rune) int {
 		return int(game.P1)
 	}
 	return int(game.P2)
-}
-
-func RestartGame(gc *game.GameContext, boxes *[]*BoxHolder, player int) {
-	// rest the game
-	gc.PlayerTurn = game.P1
-	for _, v := range *boxes {
-		v.visible = false
-		v.content = ' '
-	}
-	if gc.Logs.Log {
-		gc.Logs.ClearLines()
-		if player != 0 {
-			gc.Logs.AddLine(fmt.Sprintf("Player Won: P%d", player))
-		}
-		gc.Logs.AddLine("Start New Game")
-	}
 }
 
 func (b *BoxHolder) GetTopLeftCoords() utils.Point {
@@ -182,7 +168,7 @@ func (b *BoxHolder) Draw(gs *game.GameContext) {
 // Each box should have a ref of all boxes, that is easier to check on very turn, since
 // each box has its own inputevents too.
 
-func (b *BoxHolder) IsTerminal(content rune) bool {
+func (b *BoxHolder) IsTerminal() (bool, int) {
 	winPatterns := [8][3]int{
 		{0, 1, 2},
 		{3, 4, 5},
@@ -195,13 +181,26 @@ func (b *BoxHolder) IsTerminal(content rune) bool {
 	}
 
 	board := GetBoxes()
+
+	// check for winner
 	for _, pattern := range winPatterns {
-		if board[pattern[0]].content == content &&
-			board[pattern[1]].content == content &&
-			board[pattern[2]].content == content {
-			return true
+		if board[pattern[0]].content != ' ' &&
+			board[pattern[0]].content == board[pattern[1]].content &&
+			board[pattern[1]].content == board[pattern[2]].content {
+
+			if board[pattern[0]].content == 'X' {
+				return true, 1
+			}
+			return true, -1
 		}
 	}
 
-	return false
+	// check draw
+	for i := range board {
+		if board[i].content == ' ' {
+			return false, 0
+		}
+	}
+
+	return true, 0
 }

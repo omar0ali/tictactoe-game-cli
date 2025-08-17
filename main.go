@@ -52,8 +52,7 @@ func main() {
 			case *tcell.EventKey:
 				if ev.Rune() == 'r' {
 					// restarting the game
-					entities.RestartGame(&gameState, &boxes, 0)
-					entities.EnableBoxes()
+					entities.RestartGame(&gameState)
 				}
 			}
 			for _, entity := range gameState.GetEntities() {

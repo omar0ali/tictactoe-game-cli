@@ -35,6 +35,8 @@ type Dialog struct {
 	title    string
 }
 
+// func InitLogDialog()
+
 func InitDialog(maxWidth int, position Position, screen tcell.Screen, title string) Dialog {
 	minWidth := max(maxWidth, 40)
 	width, _ := screen.Size()
