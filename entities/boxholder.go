@@ -41,7 +41,7 @@ func (b *BoxHolder) GetContent() rune {
 	return b.content
 }
 
-func (b *BoxHolder) CheckGame(gc *game.GameContext) bool {
+func CheckGame(gc *game.GameContext, b *BoxHolder) bool {
 	status, win := IsTerminal()
 	if status {
 		if win != 0 {
@@ -75,7 +75,7 @@ func (b *BoxHolder) SwitchTurn(gc *game.GameContext) {
 		gc.PlayerTurn = game.P1
 	}
 
-	if b.CheckGame(gc) {
+	if CheckGame(gc, b) {
 		return
 	}
 }
@@ -105,7 +105,7 @@ func (b *BoxHolder) InputEvents(event tcell.Event, gc *game.GameContext) {
 			getAiMove := GetAIMove()
 			boxes[getAiMove].SetContent('O')
 			gc.PlayerTurn = game.P1
-			if b.CheckGame(gc) {
+			if CheckGame(gc, boxes[getAiMove]) {
 				return
 			}
 		}
