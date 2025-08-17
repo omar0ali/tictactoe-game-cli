@@ -114,9 +114,7 @@ func Minimax(isMaximizing bool) int {
 				boxes[i].content = 'O'
 				val := Minimax(false)
 				boxes[i].content = ' ' // undo move
-				if val > best {
-					best = val
-				}
+				best = max(val, best)
 			}
 		}
 		return best
@@ -127,9 +125,7 @@ func Minimax(isMaximizing bool) int {
 				boxes[i].content = 'X'
 				val := Minimax(true)
 				boxes[i].content = ' ' // undo
-				if val < best {
-					best = val
-				}
+				best = min(val, best)
 			}
 		}
 		return best
