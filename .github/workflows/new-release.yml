@@ -14,13 +14,13 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.21'
+          go-version: '1.24'
       - name: Build binaries
         run: |
           mkdir -p dist
-          GOOS=linux GOARCH=amd64 go build -o dist/myapp-linux main.go
-          GOOS=windows GOARCH=amd64 go build -o dist/myapp-windows.exe main.go
-          GOOS=darwin GOARCH=amd64 go build -o dist/myapp-mac main.go
+          GOOS=linux GOARCH=amd64 go build -o dist/tictactoe-game-linux main.go
+          GOOS=windows GOARCH=amd64 go build -o dist/tictactoe-game-windows.exe main.go
+          GOOS=darwin GOARCH=amd64 go build -o dist/tictactoe-game-mac main.go
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
