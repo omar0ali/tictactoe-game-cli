@@ -58,15 +58,20 @@ func (b *BoxHolder) switchTurn(gc *game.GameContext) {
 
 	status, win := b.IsTerminal()
 
-	if status && win != 0 {
-		if gc.Dialog.IsVisible() {
-			gc.Dialog.ClearLines()
+	if status {
+		if win != 0 {
+			if gc.Dialog.IsVisible() {
+				gc.Dialog.ClearLines()
+			}
+			gc.Logs.AddLine(fmt.Sprintf("* Winner: %c", b.content))
+			DisabledBoxes()
+		} else {
+			// draw
+			gc.Logs.AddLine("* Draw")
 		}
-		gc.Logs.AddLine(fmt.Sprintf("* Winner: %c", b.content))
 		gc.Dialog.AddLine("* You can press 'r' key to restart the game at any time.")
 		gc.Dialog.AddLine("* Press 'q' to quit.")
 		gc.Dialog.SetVisible(true)
-		DisabledBoxes()
 		return
 	}
 

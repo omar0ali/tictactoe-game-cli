@@ -36,12 +36,8 @@ func GetBoxes() []*BoxHolder {
 	return nil
 }
 
-func checkBoxes() bool {
-	return boxes != nil
-}
-
 func DisabledBoxes() bool {
-	if !checkBoxes() {
+	if boxes == nil {
 		return false
 	}
 	for _, box := range boxes {
@@ -51,7 +47,7 @@ func DisabledBoxes() bool {
 }
 
 func EnableBoxes() bool {
-	if !checkBoxes() {
+	if boxes == nil {
 		return false
 	}
 	for _, box := range boxes {
