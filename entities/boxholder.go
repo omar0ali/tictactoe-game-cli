@@ -41,15 +41,7 @@ func (b *BoxHolder) GetContent() rune {
 	return b.content
 }
 
-func (b *BoxHolder) switchTurn(gc *game.GameContext) {
-	if gc.PlayerTurn == game.P1 {
-		b.SetContent('X')
-		gc.PlayerTurn = game.P2
-	} else {
-		b.SetContent('O')
-		gc.PlayerTurn = game.P1
-	}
-
+func (b *BoxHolder) CheckGame(gc *game.GameContext) bool {
 	status, win := IsTerminal()
 	if status {
 		if win != 0 {
@@ -61,14 +53,29 @@ func (b *BoxHolder) switchTurn(gc *game.GameContext) {
 		gc.Dialog.AddLine("* You can press 'r' key to restart the game at any time.")
 		gc.Dialog.AddLine("* Press 'q' to quit.")
 		gc.Dialog.SetVisible(true)
-		return
+		return status
 	}
 	gc.Logs.AddLine(fmt.Sprintf("Place: %c | Box: %d", b.content, b.ID))
 	gc.Logs.AddLine("--------------")
 	if gc.PlayerTurn == game.P1 {
 		gc.Logs.AddLine("Turn: Player 1")
 	} else {
-		gc.Logs.AddLine("Turn: Player 2")
+		gc.Logs.AddLine("Turn: Player 2 or AI")
+	}
+	return status
+}
+
+func (b *BoxHolder) SwitchTurn(gc *game.GameContext) {
+	if gc.PlayerTurn == game.P1 {
+		b.SetContent('X')
+		gc.PlayerTurn = game.P2
+	} else {
+		b.SetContent('O')
+		gc.PlayerTurn = game.P1
+	}
+
+	if b.CheckGame(gc) {
+		return
 	}
 }
 
@@ -85,18 +92,21 @@ func (b *BoxHolder) InputEvents(event tcell.Event, gc *game.GameContext) {
 			mouseX, mouseY := ev.Position()
 			if mouseX >= b.sPoints.X && mouseY >= b.sPoints.Y {
 				if mouseX <= b.ePoints.X && mouseY <= b.ePoints.Y {
-					b.switchTurn(gc)
+					b.SwitchTurn(gc)
 				}
 			}
 		}
 	case *tcell.EventKey:
-		if ev.Rune() == 'p' {
+		if ev.Rune() == 'a' {
 			if gc.PlayerTurn != game.P2 {
 				return
 			}
 			getAiMove := GetAIMove()
 			boxes[getAiMove].SetContent('O')
 			gc.PlayerTurn = game.P1
+			if b.CheckGame(gc) {
+				return
+			}
 		}
 	}
 }
