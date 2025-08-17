@@ -43,30 +43,19 @@ func (b *BoxHolder) GetContent() rune {
 
 func (b *BoxHolder) switchTurn(gc *game.GameContext) {
 	if gc.PlayerTurn == game.P1 {
-		b.content = 'X'
+		b.SetContent('X')
 		gc.PlayerTurn = game.P2
 	} else {
-		b.content = 'O'
+		b.SetContent('O')
 		gc.PlayerTurn = game.P1
 	}
 
-	b.visible = !b.visible
-
-	gc.Logs.AddLine(
-		fmt.Sprintf("Place: %c | Box: %d", b.content, b.ID),
-	)
-
-	status, win := b.IsTerminal()
-
+	status, win := IsTerminal()
 	if status {
 		if win != 0 {
-			if gc.Dialog.IsVisible() {
-				gc.Dialog.ClearLines()
-			}
 			gc.Logs.AddLine(fmt.Sprintf("* Winner: %c", b.content))
 			DisabledBoxes()
 		} else {
-			// draw
 			gc.Logs.AddLine("* Draw")
 		}
 		gc.Dialog.AddLine("* You can press 'r' key to restart the game at any time.")
@@ -74,9 +63,8 @@ func (b *BoxHolder) switchTurn(gc *game.GameContext) {
 		gc.Dialog.SetVisible(true)
 		return
 	}
-
+	gc.Logs.AddLine(fmt.Sprintf("Place: %c | Box: %d", b.content, b.ID))
 	gc.Logs.AddLine("--------------")
-
 	if gc.PlayerTurn == game.P1 {
 		gc.Logs.AddLine("Turn: Player 1")
 	} else {
@@ -100,6 +88,15 @@ func (b *BoxHolder) InputEvents(event tcell.Event, gc *game.GameContext) {
 					b.switchTurn(gc)
 				}
 			}
+		}
+	case *tcell.EventKey:
+		if ev.Rune() == 'p' {
+			if gc.PlayerTurn != game.P2 {
+				return
+			}
+			getAiMove := GetAIMove()
+			boxes[getAiMove].SetContent('O')
+			gc.PlayerTurn = game.P1
 		}
 	}
 }
@@ -131,6 +128,11 @@ func (b *BoxHolder) GetBottomLeftCoords() utils.Point {
 		X: b.sPoints.X,
 		Y: b.ePoints.Y,
 	}
+}
+
+func (b *BoxHolder) SetContent(content rune) {
+	b.content = content
+	b.visible = true
 }
 
 func (b *BoxHolder) GetBoxHeight() int {
@@ -168,44 +170,4 @@ func (b *BoxHolder) Draw(gs *game.GameContext) {
 	for i := 1; i < b.GetBoxWidth(); i++ {
 		gs.Window.SetContent(b.GetBottomLeftCoords().X+i, b.GetBottomLeftCoords().Y, tcell.RuneHLine)
 	}
-}
-
-// Each box should have a ref of all boxes, that is easier to check on very turn, since
-// each box has its own inputevents too.
-
-func (b *BoxHolder) IsTerminal() (bool, int) {
-	winPatterns := [8][3]int{
-		{0, 1, 2},
-		{3, 4, 5},
-		{6, 7, 8},
-		{0, 3, 6},
-		{1, 4, 7},
-		{2, 5, 8},
-		{0, 4, 8},
-		{2, 4, 6},
-	}
-
-	board := GetBoxes()
-
-	// check for winner
-	for _, pattern := range winPatterns {
-		if board[pattern[0]].content != ' ' &&
-			board[pattern[0]].content == board[pattern[1]].content &&
-			board[pattern[1]].content == board[pattern[2]].content {
-
-			if board[pattern[0]].content == 'X' {
-				return true, 1
-			}
-			return true, -1
-		}
-	}
-
-	// check draw
-	for i := range board {
-		if board[i].content == ' ' {
-			return false, 0
-		}
-	}
-
-	return true, 0
 }
