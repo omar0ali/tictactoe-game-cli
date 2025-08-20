@@ -12,12 +12,13 @@ import (
 var id int = 0
 
 type BoxHolder struct {
-	ID      int
-	sPoints utils.Point
-	ePoints utils.Point
-	content rune
-	visible bool
-	disable bool
+	ID        int
+	sPoints   utils.Point
+	ePoints   utils.Point
+	content   rune
+	visible   bool
+	disable   bool
+	winnerBox bool
 }
 
 func CreateBoxHolder(startPoint utils.Point, scale int) *BoxHolder {
@@ -27,11 +28,12 @@ func CreateBoxHolder(startPoint utils.Point, scale int) *BoxHolder {
 	endX := startPoint.X + minimum
 	endY := startPoint.Y + minimum - 2
 	boxHolder := BoxHolder{
-		ID:      id,
-		sPoints: utils.Point{X: startX, Y: startY},
-		ePoints: utils.Point{X: endX, Y: endY},
-		visible: false,
-		disable: false,
+		ID:        id,
+		sPoints:   utils.Point{X: startX, Y: startY},
+		ePoints:   utils.Point{X: endX, Y: endY},
+		visible:   false,
+		disable:   false,
+		winnerBox: false,
 	}
 	id++
 	return &boxHolder
@@ -162,23 +164,36 @@ func (b *BoxHolder) Update(gs *game.GameContext) {
 	}
 }
 
+func (b *BoxHolder) ChangeStyle() {
+	if !b.visible {
+		return
+	}
+	b.winnerBox = !b.winnerBox
+}
+
 func (b *BoxHolder) Draw(gs *game.GameContext) {
+	style := tcell.StyleDefault.Background(tcell.ColorReset).Foreground(tcell.ColorYellowGreen)
+
+	// need to color the winning box
+	if b.winnerBox && b.visible {
+		style = tcell.StyleDefault.Background(tcell.ColorReset).Foreground(tcell.ColorRed)
+	}
 	// draw corners
-	gs.Window.SetContent(b.GetTopLeftCoords().X, b.GetTopLeftCoords().Y, tcell.RuneULCorner)
-	gs.Window.SetContent(b.GetTopRightCoords().X, b.GetTopRightCoords().Y, tcell.RuneURCorner)
-	gs.Window.SetContent(b.GetBottomLeftCoords().X, b.GetBottomLeftCoords().Y, tcell.RuneLLCorner)
-	gs.Window.SetContent(b.GetBottomRightCoords().X, b.GetBottomRightCoords().Y, tcell.RuneLRCorner)
+	gs.Window.SetContentWithStyle(b.GetTopLeftCoords().X, b.GetTopLeftCoords().Y, tcell.RuneULCorner, style)
+	gs.Window.SetContentWithStyle(b.GetTopRightCoords().X, b.GetTopRightCoords().Y, tcell.RuneURCorner, style)
+	gs.Window.SetContentWithStyle(b.GetBottomLeftCoords().X, b.GetBottomLeftCoords().Y, tcell.RuneLLCorner, style)
+	gs.Window.SetContentWithStyle(b.GetBottomRightCoords().X, b.GetBottomRightCoords().Y, tcell.RuneLRCorner, style)
 	// draw lines
 	for i := 1; i < b.GetBoxHeight(); i++ {
-		gs.Window.SetContent(b.GetTopLeftCoords().X, b.GetTopLeftCoords().Y+i, tcell.RuneVLine)
+		gs.Window.SetContentWithStyle(b.GetTopLeftCoords().X, b.GetTopLeftCoords().Y+i, tcell.RuneVLine, style)
 	}
 	for i := 1; i < b.GetBoxHeight(); i++ {
-		gs.Window.SetContent(b.GetTopRightCoords().X, b.GetTopRightCoords().Y+i, tcell.RuneVLine)
+		gs.Window.SetContentWithStyle(b.GetTopRightCoords().X, b.GetTopRightCoords().Y+i, tcell.RuneVLine, style)
 	}
 	for i := 1; i < b.GetBoxWidth(); i++ {
-		gs.Window.SetContent(b.GetTopLeftCoords().X+i, b.GetTopLeftCoords().Y, tcell.RuneHLine)
+		gs.Window.SetContentWithStyle(b.GetTopLeftCoords().X+i, b.GetTopLeftCoords().Y, tcell.RuneHLine, style)
 	}
 	for i := 1; i < b.GetBoxWidth(); i++ {
-		gs.Window.SetContent(b.GetBottomLeftCoords().X+i, b.GetBottomLeftCoords().Y, tcell.RuneHLine)
+		gs.Window.SetContentWithStyle(b.GetBottomLeftCoords().X+i, b.GetBottomLeftCoords().Y, tcell.RuneHLine, style)
 	}
 }

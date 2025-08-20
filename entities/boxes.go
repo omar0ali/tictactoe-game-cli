@@ -61,6 +61,16 @@ func EnableBoxes() bool {
 	return true
 }
 
+func ColorBoxes(boxes ...*BoxHolder) bool {
+	if boxes == nil {
+		return false
+	}
+	for _, box := range boxes {
+		box.ChangeStyle()
+	}
+	return true
+}
+
 // Each box should have a ref of all boxes, that is easier to check on very turn, since
 // each box has its own inputevents too.
 // The function returns if the end of the game reached and the winner.
@@ -81,7 +91,7 @@ func IsTerminal() (bool, int) {
 		if boxes[pattern[0]].content != ' ' &&
 			boxes[pattern[0]].content == boxes[pattern[1]].content &&
 			boxes[pattern[1]].content == boxes[pattern[2]].content {
-
+			ColorBoxes(boxes[pattern[0]], boxes[pattern[1]], boxes[pattern[2]])
 			// check if O
 			if boxes[pattern[0]].content == 'O' {
 				return true, 1
