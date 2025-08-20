@@ -20,6 +20,7 @@ A simple terminal-based implementation of the classic **TicTacToe** game written
 - [X] Disable dialog windows with `h` key.
 - [X] Single-player with [MiniMax](https://en.wikipedia.org/wiki/Minimax) algorithm (will try to implement)
     - [X] To use AI, ensure that its player 2 turn and press `a` key to start the AI move.
+- [X] Win pattern change color on the board
 
 ## Getting Started
 
