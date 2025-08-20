@@ -97,3 +97,7 @@ func (s *Window) Close() {
 func (s *Window) SetContent(x, y int, prune rune) {
 	s.Screen.SetContent(x, y, prune, nil, s.Style)
 }
+
+func (s *Window) SetContentWithStyle(x, y int, prune rune, style tcell.Style) {
+	s.Screen.SetContent(x, y, prune, nil, style)
+}
