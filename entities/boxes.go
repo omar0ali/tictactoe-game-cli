@@ -57,16 +57,17 @@ func EnableBoxes() bool {
 	}
 	for _, box := range boxes {
 		box.disable = false
+		box.WinStyle(false)
 	}
 	return true
 }
 
-func ColorBoxes(boxes ...*BoxHolder) bool {
+func ColorBoxes(boxes []*BoxHolder) bool {
 	if boxes == nil {
 		return false
 	}
 	for _, box := range boxes {
-		box.ChangeStyle()
+		box.WinStyle(true)
 	}
 	return true
 }
@@ -75,7 +76,7 @@ func ColorBoxes(boxes ...*BoxHolder) bool {
 // each box has its own inputevents too.
 // The function returns if the end of the game reached and the winner.
 
-func IsTerminal() (bool, int) {
+func IsTerminal() (bool, int, []*BoxHolder) {
 	winPatterns := [8][3]int{
 		{0, 1, 2},
 		{3, 4, 5},
@@ -91,28 +92,33 @@ func IsTerminal() (bool, int) {
 		if boxes[pattern[0]].content != ' ' &&
 			boxes[pattern[0]].content == boxes[pattern[1]].content &&
 			boxes[pattern[1]].content == boxes[pattern[2]].content {
-			ColorBoxes(boxes[pattern[0]], boxes[pattern[1]], boxes[pattern[2]])
-			// check if O
-			if boxes[pattern[0]].content == 'O' {
-				return true, 1
+
+			// winning boxes
+			winners := []*BoxHolder{
+				boxes[pattern[0]],
+				boxes[pattern[1]],
+				boxes[pattern[2]],
 			}
-			// check if X
-			return true, -1
+
+			if boxes[pattern[0]].content == 'O' {
+				return true, 1, winners
+			}
+			return true, -1, winners
 		}
 	}
 
 	// check if there are empty boxes
 	for i := range boxes {
 		if boxes[i].content == ' ' {
-			return false, 0
+			return false, 0, nil
 		}
 	}
 	// no winners - End of the game
-	return true, 0
+	return true, 0, nil
 }
 
 func Minimax(isMaximizing bool) int {
-	terminal, score := IsTerminal()
+	terminal, score, _ := IsTerminal()
 	if terminal {
 		return score
 	}

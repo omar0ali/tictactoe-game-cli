@@ -44,7 +44,8 @@ func (b *BoxHolder) GetContent() rune {
 }
 
 func CheckGame(gc *game.GameContext, b *BoxHolder) bool {
-	status, win := IsTerminal()
+	status, win, winners := IsTerminal()
+	ColorBoxes(winners)
 	gc.Logs.AddLine(fmt.Sprintf("Place: %c | Box: %d", b.content, b.ID))
 	if status {
 		if win != 0 {
@@ -164,11 +165,8 @@ func (b *BoxHolder) Update(gs *game.GameContext) {
 	}
 }
 
-func (b *BoxHolder) ChangeStyle() {
-	if !b.visible {
-		return
-	}
-	b.winnerBox = !b.winnerBox
+func (b *BoxHolder) WinStyle(def bool) {
+	b.winnerBox = def
 }
 
 func (b *BoxHolder) Draw(gs *game.GameContext) {
