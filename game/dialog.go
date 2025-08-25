@@ -25,6 +25,12 @@ const (
 	TopCenter
 )
 
+type DialogOpts struct {
+	MaxWidth int
+	Position Position
+	Title    string
+}
+
 type Dialog struct {
 	Distance Distance
 	Position Position
@@ -35,13 +41,11 @@ type Dialog struct {
 	title    string
 }
 
-// func InitLogDialog()
-
-func InitDialog(maxWidth int, position Position, screen tcell.Screen, title string) Dialog {
-	minWidth := max(maxWidth, 40)
+func InitDialog(screen tcell.Screen, opts DialogOpts) Dialog {
+	minWidth := max(opts.MaxWidth, 40)
 	width, _ := screen.Size()
 	var sX int
-	switch position {
+	switch opts.Position {
 	case BottomCenter, TopCenter:
 		sX = (width / 2) - (minWidth / 2)
 	case BottomLeft, TopLeft:
@@ -55,9 +59,9 @@ func InitDialog(maxWidth int, position Position, screen tcell.Screen, title stri
 			sX, sX + minWidth,
 		},
 		visible:  true,
-		Position: position,
+		Position: opts.Position,
 		screen:   &screen,
-		title:    title,
+		title:    opts.Title,
 	}
 }
 

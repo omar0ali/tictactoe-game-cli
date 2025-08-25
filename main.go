@@ -14,10 +14,19 @@ func main() {
 	// exit channel waiting to get a an exit signal == 0 from either Events() or Update()
 	exit := make(chan int)
 
-	gridView := views.InitGridView(9, 1, 4, 3, &window)                                     // grid system
-	dialog := game.InitDialog(70, game.BottomCenter, window.Screen, "===TicTacToe Game===") // dialog enabled
+	gridView := views.InitGridView(9, 1, 4, 3, &window) // grid system
 
-	logs := game.InitDialog(10, game.TopRight, window.Screen, "Logs")
+	dialog := game.InitDialog(window.Screen, game.DialogOpts{
+		Title:    "===TicTacToe Game===",
+		MaxWidth: 70,
+		Position: game.BottomCenter,
+	})
+
+	logs := game.InitDialog(window.Screen, game.DialogOpts{
+		Title:    "Logs",
+		MaxWidth: 10,
+		Position: game.TopRight,
+	})
 
 	logs.Log = true
 
