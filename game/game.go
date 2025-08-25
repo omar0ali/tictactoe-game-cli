@@ -23,8 +23,8 @@ type (
 		Window     *core.Window
 		entities   []Entity
 		PlayerTurn PlayerTurn
-		Dialog     *Dialog
-		Logs       *Dialog
+		Dialog     *dialog
+		Logs       *dialog
 	}
 )
 

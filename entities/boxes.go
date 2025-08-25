@@ -12,11 +12,11 @@ const (
 )
 
 func SetBoxes(listOfBoxes []*BoxHolder) {
-	InitBoxes(listOfBoxes)
+	ResetBoxes(listOfBoxes)
 	boxes = listOfBoxes
 }
 
-func InitBoxes(listOfBoxes []*BoxHolder) {
+func ResetBoxes(listOfBoxes []*BoxHolder) {
 	for _, v := range listOfBoxes {
 		v.visible = false
 		v.content = ' '
@@ -26,7 +26,7 @@ func InitBoxes(listOfBoxes []*BoxHolder) {
 func RestartGame(gc *game.GameContext) {
 	// rest the game
 	gc.PlayerTurn = game.P1
-	InitBoxes(boxes)
+	ResetBoxes(boxes)
 	if gc.Logs.Log {
 		gc.Logs.ClearLines()
 		gc.Logs.AddLine("Start New Game")

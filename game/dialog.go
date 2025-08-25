@@ -31,7 +31,7 @@ type DialogOpts struct {
 	Title    string
 }
 
-type Dialog struct {
+type dialog struct {
 	Distance Distance
 	Position Position
 	lines    []string
@@ -41,7 +41,7 @@ type Dialog struct {
 	title    string
 }
 
-func InitDialog(screen tcell.Screen, opts DialogOpts) Dialog {
+func InitDialog(screen tcell.Screen, opts DialogOpts) dialog {
 	minWidth := max(opts.MaxWidth, 40)
 	width, _ := screen.Size()
 	var sX int
@@ -54,7 +54,7 @@ func InitDialog(screen tcell.Screen, opts DialogOpts) Dialog {
 		sX = width - minWidth - 1
 	}
 
-	return Dialog{
+	return dialog{
 		Distance: Distance{
 			sX, sX + minWidth,
 		},
@@ -65,7 +65,7 @@ func InitDialog(screen tcell.Screen, opts DialogOpts) Dialog {
 	}
 }
 
-func (d *Dialog) AddLine(text string) {
+func (d *dialog) AddLine(text string) {
 	maxWidth := d.Distance.GetMaxWidth()
 	runes := []rune(text)
 	for i := 0; i < len(runes); i += maxWidth {
@@ -74,19 +74,19 @@ func (d *Dialog) AddLine(text string) {
 	}
 }
 
-func (d *Dialog) SetVisible(visible bool) {
+func (d *dialog) SetVisible(visible bool) {
 	d.visible = visible
 }
 
-func (d *Dialog) ClearLines() {
+func (d *dialog) ClearLines() {
 	d.lines = d.lines[:0]
 	// clear(d.lines) // problem with this, it just removes cotnent of each element in the slice
 	// But keeps Same len/cap, and start the append not starting from 0.
 }
 
-func (d *Dialog) Update(gs *GameContext) {}
+func (d *dialog) Update(gs *GameContext) {}
 
-func (d *Dialog) GetScreenHightPosition() (int, int) {
+func (d *dialog) GetScreenHightPosition() (int, int) {
 	_, screenHeight := (*d.screen).Size()
 	maxHeight := min(len(d.lines), MaxLogsHeight)
 	height := 0
@@ -98,7 +98,7 @@ func (d *Dialog) GetScreenHightPosition() (int, int) {
 	return height, maxHeight
 }
 
-func (d *Dialog) Draw(gs *GameContext) {
+func (d *dialog) Draw(gs *GameContext) {
 	if !d.visible {
 		return
 	}
@@ -169,7 +169,7 @@ func (d *Dialog) Draw(gs *GameContext) {
 	}
 }
 
-func (d *Dialog) InputEvents(event tcell.Event, gc *GameContext) {
+func (d *dialog) InputEvents(event tcell.Event, gc *GameContext) {
 	switch ev := event.(type) {
 	case *tcell.EventKey:
 		if d.Log {
@@ -186,6 +186,6 @@ func (d *Dialog) InputEvents(event tcell.Event, gc *GameContext) {
 	}
 }
 
-func (d *Dialog) IsVisible() bool {
+func (d *dialog) IsVisible() bool {
 	return d.visible
 }
