@@ -11,9 +11,6 @@ import (
 func main() {
 	window := core.CreateWindow("TicTacToe")
 
-	// exit channel waiting to get a an exit signal == 0 from either Events() or Update()
-	exit := make(chan int)
-
 	gridView := views.InitGridView(9, 1, 4, 3, &window) // grid system
 
 	dialog := game.InitDialog(window.Screen, game.DialogOpts{
@@ -55,7 +52,7 @@ func main() {
 	gameState.AddEntity(&dialog)
 	gameState.AddEntity(&logs)
 
-	window.Events(exit,
+	go window.Events(
 		func(event tcell.Event) {
 			switch ev := event.(type) {
 			case *tcell.EventKey:
@@ -70,7 +67,7 @@ func main() {
 		},
 	)
 
-	window.Update(exit,
+	window.Update(
 		func(delta float64) {
 			// animation goes here
 			for _, entity := range gameState.GetEntities() {
@@ -79,9 +76,4 @@ func main() {
 			}
 		},
 	)
-
-	// exit
-	if val := <-exit; val == 0 {
-		return
-	}
 }
